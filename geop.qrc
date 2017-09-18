@@ -1,0 +1,17 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>images/createproject.png</file>
+    <file>images/removeproject.png</file>
+    <file>images/createline.png</file>
+    <file>images/removeline.png</file>
+    <file>images/project.png</file>
+    <file>images/line.png</file>
+    <file>images/file.png</file>
+    <file>images/copyto.png</file>
+    <file>images/copyfrom.png</file>
+    <file>images/refresh.png</file>
+    <file>images/about.png</file>
+    <file>images/help.png</file>
+    <file>images/xterm.png</file>
+</qresource>
+</RCC>
