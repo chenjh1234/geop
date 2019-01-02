@@ -127,7 +127,6 @@ return;
 void MainWindow::initMod()
 {
     int sz,i;
-    bool b;
     string s;
      
     listLog->m_file->setProject((char *)"myproject",(char *)"line2");
@@ -220,7 +219,6 @@ bool MainWindow::saveAs()
 void MainWindow::slotCreateProject()
 {
     int i,id;
-    char *ch;
     static QString str;
     QString str1;
 //
@@ -258,7 +256,6 @@ void MainWindow::slotCreateProject()
 void MainWindow::slotCreateLine()
 {
     int i,id;
-    char *ch;
     static QString str,strp;
 
     i = dlgCreate->setLine();
@@ -429,6 +426,40 @@ void MainWindow::createActions()
     xtermAct->setStatusTip(tr("xterm to the selected project directory"));
     connect(xtermAct, SIGNAL(triggered()), this, SLOT(slotXterm()));
 
+
+    modhelpAct = new QAction(QIcon(":/images/modhelp.png"),tr("&modhelp"), this);
+    modhelpAct->setStatusTip(tr(" modules  maunal"));
+    connect(modhelpAct, SIGNAL(triggered()), this, SLOT(slotModHelp()));
+
+    headerhelpAct = new QAction(QIcon(":/images/headerhelp.png"),tr("&headerhelp"), this);
+    headerhelpAct->setStatusTip(tr(" header  maunal"));
+    connect(headerhelpAct, SIGNAL(triggered()), this, SLOT(slotHeaderHelp()));
+
+
+    jobpAct = new QAction(QIcon(":/images/jobp.png"),tr("&jobp"), this);
+    jobpAct->setStatusTip(tr(" jobp"));
+    connect(jobpAct, SIGNAL(triggered()), this, SLOT(slotJobp()));
+
+    dataviewAct = new QAction(QIcon(":/images/dataview.png"),tr("&dataview"), this);
+    dataviewAct->setStatusTip(tr(" dataview"));
+    connect(dataviewAct, SIGNAL(triggered()), this, SLOT(slotDataview()));
+
+    modpadAct = new QAction(QIcon(":/images/modpad.png"),tr("&modpad"), this);
+    modpadAct->setStatusTip(tr(" modpad"));
+    connect(modpadAct, SIGNAL(triggered()), this, SLOT(slotModpad()));
+
+
+    jviewAct = new QAction(QIcon(":/images/jview.png"),tr("& jview"), this);
+    jviewAct->setStatusTip(tr("  jview"));
+    connect( jviewAct, SIGNAL(triggered()), this, SLOT(slotJview()));
+
+
+     sviewAct = new QAction(QIcon(":/images/sview.png"),tr("&sview"), this);
+     sviewAct->setStatusTip(tr("  sview"));
+    connect(sviewAct, SIGNAL(triggered()), this, SLOT(slotSview()));
+
+
+
     //connect(textEdit, SIGNAL(copyAvailable(bool)),
     //        cutAct, SLOT(setEnabled(bool)));
     //connect(textEdit, SIGNAL(copyAvailable(bool)),
@@ -448,25 +479,42 @@ void MainWindow::createMenus()
 
     fileMenu->addSeparator();
     fileMenu->addAction(refreshAct);
-     fileMenu->addSeparator();
+    fileMenu->addSeparator();
 
     fileMenu->addAction(exitAct);
  
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(helpAct);
+    helpMenu->addAction(modhelpAct);
+    //helpMenu->addAction(headerhelpAct);
     helpMenu->addAction(aboutAct);
+
+    toolMenu = menuBar()->addMenu(tr("&Tool"));
+    toolMenu->addAction(jobpAct);
+    toolMenu->addAction(dataviewAct);
+    toolMenu->addAction(modpadAct);
+    toolMenu->addAction(jviewAct);
+    toolMenu->addAction(sviewAct);
     qDebug() << "create menu";
     
 }
  
 void MainWindow::createToolBars()
 {
-    fileToolBar = addToolBar(tr("ToolBar"));
+    fileToolBar = addToolBar(tr("ptojectToolBar"));
     fileToolBar->addAction(createProjectAct);
     fileToolBar->addAction(createLineAct);
     fileToolBar->addAction(refreshAct);
     fileToolBar->addAction(xtermAct);
+    fileToolBar->addAction(modhelpAct);
     fileToolBar->addAction(helpAct);
+
+    toolToolBar = addToolBar(tr("toolToolBar"));
+    toolToolBar->addAction(jobpAct);
+    toolToolBar->addAction(dataviewAct);
+    toolToolBar->addAction(modpadAct);
+    toolToolBar->addAction(jviewAct);
+    toolToolBar->addAction(sviewAct);
      qDebug() << "create toolBar";
   
 }
@@ -584,25 +632,8 @@ void MainWindow::slotShowFiles(int num)
 }
 void MainWindow::slotXterm()
 {
-    QString path,qstr;
-    QString cmd;
-    string str;
-    QString project,line;
-    project = m_data->m_project.getCurrentProject().c_str();
-    line = m_data->m_project.getCurrentLine().c_str();
-    if (line.isEmpty()) 
-    {
-        str = m_data->m_project.getProjectHome(project.toUtf8().data()) ;
-    }
-    else
-    {
-        str =  m_data->m_project.getLineHome(line.toUtf8().data()) ;
-    }
-    qstr = str.c_str();
-    //qDebug() << "dir= " <<qstr;
-    cmd = "xterm" ;
-    run.setWorkingDirectory(qstr);
-    run.start(cmd);
+
+     runCmd("xterm");
  
 }
 void MainWindow::setTitle()
@@ -634,3 +665,41 @@ void MainWindow::slotHelp()
     run.start(cmd);
 
 }
+void MainWindow::slotModHelp()
+{
+     runCmd("modhelp");
+}
+
+void MainWindow::slotJobp()
+{
+       runCmd("jobp");
+}
+void MainWindow::slotDataview()
+{
+       runCmd("dataview");
+}
+void MainWindow::slotModpad()
+{
+       runCmd("modpad");
+}
+
+
+void MainWindow::slotJview()
+{
+       runCmd("jview");
+}
+void MainWindow::slotSview()
+{
+       runCmd("sview");
+}
+
+void MainWindow::runCmd(QString cmd)
+{
+    QString qstr;
+    qstr =m_data->getWKDir();
+    run.setWorkingDirectory(qstr);
+    run.start(cmd);
+    qDebug() << "dir cmd=" <<qstr << cmd;
+    run.start(cmd);
+}
+ 

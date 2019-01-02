@@ -23,6 +23,7 @@ public:
     dataMng m_sdata;
     logMng m_log;
     QString str2Qstr(string s);
+    QString getWKDir();
 
 };
 

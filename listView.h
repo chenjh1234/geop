@@ -65,6 +65,7 @@ private:
 
     QMap <QString,QString> m_selected;
     QMap <QString,QString> m_selections;
+    int mDoubleClick;
 
 
 signals:

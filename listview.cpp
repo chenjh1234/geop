@@ -23,6 +23,7 @@ void listView::init()
 
     model = new QStandardItemModel(1,4,parent());
     createActions();
+    mDoubleClick = 0;
     refresh();
 }
 void listView::createActions()
@@ -198,17 +199,24 @@ void listView::slotEditFile()
 
 
     filetype = m_file->getConfig().c_str();
-    if (m_selected.isEmpty()) return;
-    //path = m_selected.first();
-    path = m_selected.constBegin().value();
+    if (m_selected.isEmpty()) path = "";
+    else
+        path = m_selected.constBegin().value();
+    qDebug() <<"mDoubleClick = " << mDoubleClick ;
     
     if (filetype == "flow") 
     {
-        //cmd = "jobp " +path;
-        cmd = QString("jobp ") + "\"" + path +"\"";// for win test
+        str = "jobp ";
+        if (mDoubleClick == 0)  
+        {
+            str = "jview "; 
+        }
+        run.setWorkingDirectory(data->getWKDir());
+
+        cmd = str+ "\"" + path +"\"";// for win test
         cmd = cmd + " " + project+ " " +line;
-        //cmd = "ls";
-        //qDebug() << "cmd=" <<cmd;
+        if (path.isEmpty())  cmd = str;
+        qDebug() << "cmd=" << cmd; 
         run.start(cmd);
         //qDebug() <<"err = " << run.readAllStandardError();
         //qDebug() <<"  out =" << run.readAllStandardOutput();
@@ -216,10 +224,17 @@ void listView::slotEditFile()
     }
     if (filetype == "data") 
     {
-        cmd = QString("dataview ") + "\"" + path +"\"";
+         str = "dataview ";
+        //if (mDoubleClick == 0)  str = "sview ";
+         if (mDoubleClick == 0)  
+        {
+            str = "sview ";
+            run.setWorkingDirectory(data->getWKDir());
+        }
+        cmd = str+ "\"" + path +"\"";
         //cmd = cmd + " " + project+ " " +line;
         //cmd = "ls";
-        //qDebug() << "cmd=" <<cmd;
+        qDebug() << "cmd=" <<cmd;
         run.start(cmd);
         //qDebug() <<"err = " << run.readAllStandardError();
         //qDebug() <<"  out =" << run.readAllStandardOutput();
@@ -251,7 +266,7 @@ QString  listView::getTypeStr(QString type)
 
     if (config == "log")  
     {
-        filter = "LOG (*.log *.LOG);;All files (*.* *)";
+        filter = "LOG (*.log *.LOG );;All files (*.* *)";
         target = qstr + SLASH +"log";
     }
     if (config == "flow")
@@ -261,7 +276,7 @@ QString  listView::getTypeStr(QString type)
     }
     if (config == "data")  
     {
-        filter = "Seis Data (*.cseis *.CSEIS);;All files (*.* *)";
+        filter = "Seis Data (*.cseis *.CSEIS *.sgy *.SGY);;All files (*.* *)";
         target = qstr + SLASH + "data";
     }
     if (config == "table")  
@@ -373,7 +388,10 @@ void listView::slotRemoveFile()
 void listView::mouseDoubleClickEvent ( QMouseEvent * event )
 {
     QTreeView::mouseDoubleClickEvent(event);
+   // if(event->button() == Qt::LeftButton)
+    mDoubleClick = 1;
     slotEditFile();
+    mDoubleClick = 0;
 }
 void listView::getSelections()
 {

@@ -50,6 +50,14 @@ private slots:
     void slotShowFiles(int);
     void slotXterm();
 
+    void slotModHelp();
+
+    void slotJobp();
+    void slotDataview();
+    void slotModpad();
+    void slotJview();
+    void slotSview();
+
 
 private:
     void initMod();
@@ -65,6 +73,8 @@ private:
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
     void setTitle();
+    void runCmd(QString cmd);
+    //QString getWKDir();
 
    // QPlainTextEdit *textEdit;
     QTextBrowser *textView;
@@ -81,10 +91,11 @@ private:
     QProcess run;
 
     QMenu *fileMenu;
-    QMenu *editMenu;
+    QMenu *toolMenu;
     QMenu *helpMenu;
+
     QToolBar *fileToolBar;
-    QToolBar *editToolBar;
+    QToolBar *toolToolBar;
 
     QAction *createProjectAct;
     QAction *createLineAct;
@@ -96,6 +107,15 @@ private:
      
     QAction *aboutAct;
     QAction *helpAct;
+    QAction *modhelpAct;
+    QAction *headerhelpAct;
+// action for tool
+    QAction *jobpAct;
+    QAction *dataviewAct;
+    QAction *modpadAct;
+    QAction *jviewAct;
+    QAction *sviewAct;
+
 };
 //! [0]
 
